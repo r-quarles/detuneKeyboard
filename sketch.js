@@ -31,6 +31,7 @@ let oct = 4;             //Octave multiplier (default 4 - middle octave)
 let freq = new Array(buttonCount).fill(false);              //Holds the frequencies for each key that we'll send via OSC
 let refFreq = new Array(buttonCount).fill(false);           //Holds the reference frequencies in 12TET so we can place the button
 let centsDif = new Array(buttonCount).fill(false);          //Holds the number of cents difference between each keys ref and real freq
+let centsDefault = [];
 let detuneDist = new Array(buttonCount).fill(false);        //Holds the amount of cents to detune
 let activeTouches = new Array(buttonCount).fill(null);      //An array to describe the touch status and id of all buttons, will hold the id of touch to compare
 
@@ -72,7 +73,7 @@ function setup() {
   // Calculate default/reference freq in 12TET for each key
     equalTuning(i);        // Calculate each button's freq (no detune)
     refFreq[i] = freq[i];  // Assign each buttons ref freq to the found frequency from function
-  
+    centsDefault[i] = 0;   //Defailt 0 cents difference
   // Make oscillators for each key
     osc[i] = new p5.Oscillator();  //Make a new oscillator for each button
     osc[i].freq(freq[i]);          //Freq[i] is dynamic across all modes, it will always be the most recent update of i
@@ -152,6 +153,7 @@ function keyPressed() {
     for (let i = 0; i< buttonCount; i++) {
       equalTuning(i);  //Assign each buttons frequency to the cooresponding 12TET ref freq
       centsCalc(i);  //Send centsCalc which button and it will calculate the cents between that buttons new freq and the ref freq in EDO
+      centsDefault[i] = centsDif[i]; //Remember the cents difference
     }
     updateKeys();    //Run funct to update key position
     controlLabel = "Equal Temperment";
@@ -163,6 +165,7 @@ function keyPressed() {
     for (let i = 0; i< buttonCount; i++) {
       justTuning(i);        //Calculate freq[] based on just intonation
       centsCalc(i);  //Send centsCalc which button and it will calculate the cents between that buttons new freq and the ref freq in EDO
+      centsDefault[i] = centsDif[i]; //Remember the cents difference
     }
     updateKeys();    //Run funct to update key position
     controlLabel = "Just Temperment";
@@ -174,6 +177,7 @@ function keyPressed() {
     for (let i = 0; i< buttonCount; i++) {
       pythTuning(i);        //Calculate freq[] based on pyth intonation
       centsCalc(i);  //Send centsCalc which button and it will calculate the cents between that buttons new freq and the ref freq in EDO
+      centsDefault[i] = centsDif[i]; //Remember the cents difference
     }
     updateKeys();    //Run funct to update key position
     controlLabel = "Pythagorean Temperment";
@@ -185,6 +189,7 @@ function keyPressed() {
     for (let i = 0; i< buttonCount; i++) {
       qcommaTuning(i);        //Calculate freq[] based on qcomma intonation
       centsCalc(i);  //Send centsCalc which button and it will calculate the cents between that buttons new freq and the ref freq in EDO
+      centsDefault[i] = centsDif[i]; //Remember the cents difference
     }
     updateKeys();    //Run funct to update key position
     controlLabel = "Quarter-Comma Meantone Temperament";
@@ -220,6 +225,7 @@ function touchStarted() {
         if (isTouchingButton(t, i)) { // Check if touch is inside the circle
           activeTouches[i] = t.id; //Mark the button as active and hold onto the id
           pressButton(t.y, i);
+          console.log(activeTouches[i]);
         }
       }
     }
@@ -230,6 +236,7 @@ function touchStarted() {
         for (let i = 0; i< buttonCount; i++) {
           equalTuning(i);  //Assign each buttons frequency to the cooresponding 12TET ref freq
           centsCalc(i);  //Send centsCalc which button and it will calculate the cents between that buttons new freq and the ref freq in EDO
+          centsDefault[i] = centsDif[i]; //Remember the cents difference
         }
         console.log("Equal Temperament");
         controlLabel = "Equal Temperment";
@@ -237,6 +244,7 @@ function touchStarted() {
         for (let i = 0; i< buttonCount; i++) {
           justTuning(i);        //Calculate freq[] based on just intonation
           centsCalc(i);  //Send centsCalc which button and it will calculate the cents between that buttons new freq and the ref freq in EDO
+          centsDefault[i] = centsDif[i]; //Remember the cents difference
         }
         console.log("Just Temperament");
         controlLabel = "Just Temperment";
@@ -244,6 +252,7 @@ function touchStarted() {
         for (let i = 0; i< buttonCount; i++) {
           pythTuning(i);        //Calculate freq[] based on pyth intonation
           centsCalc(i);  //Send centsCalc which button and it will calculate the cents between that buttons new freq and the ref freq in EDO
+          centsDefault[i] = centsDif[i]; //Remember the cents difference
         }
         console.log("Pythagorean Temperament");
         controlLabel = "Pythagorean Temperment";
@@ -251,6 +260,7 @@ function touchStarted() {
         for (let i = 0; i< buttonCount; i++) {
           qcommaTuning(i);        //Calculate freq[] based on qcomma intonation
           centsCalc(i);  //Send centsCalc which button and it will calculate the cents between that buttons new freq and the ref freq in EDO
+          centsDefault[i] = centsDif[i]; //Remember the cents difference
         }
         console.log("Quarter-Comma Meantone Temperament");
         controlLabel = "Quarter-Comma Meantone Temperment";
@@ -278,6 +288,7 @@ function mousePressed() {
         for (let i = 0; i< buttonCount; i++) {
           equalTuning(i);  //Assign each buttons frequency to the cooresponding 12TET ref freq
           centsCalc(i);  //Send centsCalc which button and it will calculate the cents between that buttons new freq and the ref freq in EDO
+          centsDefault[i] = centsDif[i]; //Remember the cents difference
         }
         console.log("Equal Temperament");
         controlLabel = "Equal Temperment";
@@ -285,6 +296,8 @@ function mousePressed() {
         for (let i = 0; i< buttonCount; i++) {
           justTuning(i);        //Calculate freq[] based on just intonation
           centsCalc(i);  //Send centsCalc which button and it will calculate the cents between that buttons new freq and the ref freq in EDO
+          centsDefault[i] = centsDif[i]; //Remember the cents difference
+        
         }
         console.log("Just Temperament");
         controlLabel = "Just Temperment";
@@ -292,6 +305,8 @@ function mousePressed() {
         for (let i = 0; i< buttonCount; i++) {
           pythTuning(i);        //Calculate freq[] based on pyth intonation
           centsCalc(i);  //Send centsCalc which button and it will calculate the cents between that buttons new freq and the ref freq in EDO
+          centsDefault[i] = centsDif[i]; //Remember the cents difference
+        
         }
         console.log("Pythagorean Temperament");
         controlLabel = "Pythagorean Temperment";
@@ -299,6 +314,8 @@ function mousePressed() {
         for (let i = 0; i< buttonCount; i++) {
           qcommaTuning(i);        //Calculate freq[] based on qcomma intonation
           centsCalc(i);  //Send centsCalc which button and it will calculate the cents between that buttons new freq and the ref freq in EDO
+          centsDefault[i] = centsDif[i]; //Remember the cents difference
+        
         }
         console.log("Quarter-Comma Meantone Temperament");
         controlLabel = "Quarter-Comma Meantone Temperment";
@@ -376,7 +393,6 @@ function touchEnded() {  // Reset each button when mouse is released
     for (let i = 0; i < buttonCount; i++) {
       if (activeTouches[i] === t.id) { // If the touch ID matches this button's active IDgate[i] == 1) {                  // Only reset if button was active (gate was open)
         resetButton(i);
-        activeTouches[i] = null; //Mark this button as inactive
       }
     }
   }
@@ -431,11 +447,12 @@ function resetButton(i){
   gate[i] = 0;                       // Set gate state to "closed"
   circleColor[i] = defaultCircleColor[i];  //Update the color to show it's pressed
   topLabel[i] = intervalLabel[i];   //Update to detune cents
-  
+  activeTouches[i] = null; //Mark this button as inactive
+
   //For touch/latch
   if (touchLatch == 1){
     currentY[i] = circleY[i];        // Reset y position to default
-    centsDif[i] = 0;
+    centsDif[i] = centsDefault[i];   //Set it to the default position for whichever tuning
   } if (touchLatch == 1) {
     currentY[i] = lastY[i];
   }                          // Otherwise do nothing
