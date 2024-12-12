@@ -157,9 +157,9 @@ function draw() {
   fill(255);
   textAlign(LEFT);
   textSize(diameter/1.2);
-  text(controlLabel, controlButtonX[0]-0.5*diameter, controlButtonY[0]-2.1*diameter);
+  text(controlLabel, controlButtonX[0]-0.5*diameter, controlButtonY[0]-1.8*diameter);
   textSize(diameter/2);
-  text("Octave: " + oct, controlButtonX[0]-0.5*diameter, controlButtonY[0]-1.1*diameter);
+  text("Octave: " + oct, controlButtonX[0]-0.5*diameter, controlButtonY[0]-*diameter);
 }
 
 function windowResized() {
