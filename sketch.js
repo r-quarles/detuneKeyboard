@@ -24,6 +24,7 @@ let controlLabel = "Equal Temperment"; //Default label is equal
 
 // VARS FOR SYNTHESIS
 let osc = [];  //Array of oscillators
+let filter, verb;
 let gate = new Array(buttonCount).fill(false);                // Gate for each button, 1 = gate, 0 = stop
 let tonic = 32.703;      //Holds the tonic (starting freq) (Lowest C)
 let divisions = 12;      //Divisions for EDO
@@ -47,6 +48,12 @@ function setup() {
   background(0);                 // Fill the background with black
   noStroke();
   
+  //Make the effects to add to oscs
+  filter = new p5.LowPass();
+  filter.freq(800); 
+  verb = new p5.Reverb();
+  verb.set(0.1);
+
   // Calculate spacing and initial positions for each button
   let spacing = windowWidth / (buttonCount + 5); // Space each button evenly, with 2 button "slots" to the left
   diameter = windowWidth / 24;  //Width of each button so it scales
@@ -73,15 +80,20 @@ function setup() {
   // Calculate default/reference freq in 12TET for each key
     equalTuning(i);        // Calculate each button's freq (no detune)
     refFreq[i] = freq[i];  // Assign each buttons ref freq to the found frequency from function
-    centsDefault[i] = 0;   //Defailt 0 cents difference
+    centsDefault[i] = 0;   //Default 0 cents difference
   // Make oscillators for each key
     osc[i] = new p5.Oscillator();  //Make a new oscillator for each button
     osc[i].freq(freq[i]);          //Freq[i] is dynamic across all modes, it will always be the most recent update of i
     osc[i].amp(0);                 // 0 amp to start
+    osc[i].disconnect();
+    osc[i].connect(filter);        //Connect it to the filter
+    filter.disconnect();
+    filter.connect(verb);
     osc[i].start();                //Start the synth
   }
 
   //Calculate where the controls for tunings should go
+    //Tunings control  
     controlButtonX[0] = circleX[0] - diameter*1.5; //Make the x of each control button 1 button width before the first one
     controlButtonX[1] = circleX[0] - diameter*1.5;
     controlButtonX[2] = circleX[0] - diameter*1.5;
@@ -92,6 +104,13 @@ function setup() {
     controlButtonY[2] = circleY[0];
     controlButtonY[3] = circleY[0] + diameter*1.5;
   
+    //Octave
+   /* controlButtonX[4] = circleX[15];  //Set up/down button in line w last slider
+    controlButtonX[5] = circleX[15];
+
+    controlButtonY[4] = controlButtonY[0] + 1/5*diameter;  //Set up to be just above
+    controlButtonY[4] = controlButtonY[0];                 //Set down to be in line w first control
+    */
   console.log("Use Keys 1/2/3 to select between Equal/Just/Pythagorean Tuning");
   console.log("Use 's' for long sustain, use 'r' for short sustain");
   console.log("Use '[' for touch mode, use ']' for latch mode");
@@ -133,12 +152,14 @@ function draw() {
   rect(controlButtonX[2]-(diameter/2), controlButtonY[2]-(diameter/2), diameter, diameter);
   fill(53, 153, 204); //Blue
   rect(controlButtonX[3]-(diameter/2), controlButtonY[3]-(diameter/2), diameter, diameter);
-  textSize(2*diameter/7);
-  textAlign(CENTER);
+  //triangle(controlButtonX[4], controlButtonY[4], controlButtonX[4]+diameter, controlButtonY[4]-diameter/2, controlButtonX[4]+diameter, controlButtonY[4]+diameter/2);
+  //Text
   fill(255);
   textAlign(LEFT);
   textSize(diameter/1.2);
-  text(controlLabel, controlButtonX[0]-0.5*diameter, controlButtonY[0]-1.5*diameter);
+  text(controlLabel, controlButtonX[0]-0.5*diameter, controlButtonY[0]-2.1*diameter);
+  textSize(diameter/2);
+  text("Octave: " + oct, controlButtonX[0]-0.5*diameter, controlButtonY[0]-1.1*diameter);
 }
 
 function windowResized() {
@@ -213,6 +234,29 @@ function keyPressed() {
     touchLatch = 1;
     for (let i = 0; i< buttonCount; i++) {currentY[i] = circleY[i]; centsDif[i] = 0;}  //Reset to default position and label
     console.log("Touch Mode - Keys will return to center line");
+  }
+
+//Keys for octaves
+  if (key === '-') { //If pressing -/_
+    oct--;
+    for (let i = 0; i < buttonCount; i++) {
+      if (tuning = 0){equalTuning(i);} // Recalculate frequencies for the new octave
+      if (tuning = 1){justTuning(i);} 
+      if (tuning = 2){pythTuning(i);}
+      if (tuning = 3){qcommaTuning(i);}
+      refFreq[i] = freq[i];  // Update reference frequencies
+      osc[i].freq(freq[i]);  // Update the oscillator frequency
+  } console.log("Octave Decreased to " + oct);
+  } if (key === '=') { //If pressing =/+
+    oct++;
+    for (let i = 0; i < buttonCount; i++) {
+      if (tuning = 0){equalTuning(i);} // Recalculate frequencies for the new octave
+      if (tuning = 1){justTuning(i);} 
+      if (tuning = 2){pythTuning(i);}
+      if (tuning = 3){qcommaTuning(i);}
+      refFreq[i] = freq[i];  // Update reference frequencies
+      osc[i].freq(freq[i]);  // Update the oscillator frequency
+  } console.log("Octave Increased to " + oct);
   }
 }
   
@@ -439,7 +483,7 @@ function pressButton(yCoord, i){
   circleColor[i] = pressCircleColor[i];  //Update the color to show it's pressed
 //  topLabel[i] = (Math.round(centsDif[i] * -10) / 10);   //Update to detune cents
 
-  osc[i].amp(0.5, 0.15);  //Let the synth sound w fade 0.15
+  osc[i].amp(0.99, 0.25);  //Let the synth sound w fade 0.25
 }
 
 //For resetting buttons
@@ -457,7 +501,7 @@ function resetButton(i){
     currentY[i] = lastY[i];
   }                          // Otherwise do nothing
 
-  osc[i].amp(0.0, 0.6, sustain);  //Mute the synth w fade 0.3 and sustain selected
+  osc[i].amp(0.0, 0.3, sustain);  //Mute the synth w fade 0.3 and sustain selected
 }
 
 // A function that calculates equal tuning with variable divisions of the octave
