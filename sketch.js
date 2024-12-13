@@ -90,6 +90,7 @@ function setup() {
     filter.disconnect();
     filter.connect(verb);
     osc[i].start();                //Start the synth
+    osc[i].volume(1);              //Make sure were at full volume
   }
 
   //Calculate where the controls for tunings should go
