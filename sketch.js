@@ -50,7 +50,7 @@ function setup() {
   
   //Make the effects to add to oscs
   filter = new p5.LowPass();
-  filter.freq(800); 
+  filter.freq(800, 0.5); 
   verb = new p5.Reverb();
   verb.set(0.1);
 
@@ -90,7 +90,6 @@ function setup() {
     filter.disconnect();
     filter.connect(verb);
     osc[i].start();                //Start the synth
-    osc[i].mult(2);                //Increase the amp (its too quiet on pc)
   }
 
   //Calculate where the controls for tunings should go
@@ -241,20 +240,20 @@ function keyPressed() {
   if (key === '-') { //If pressing -/_
     oct--;
     for (let i = 0; i < buttonCount; i++) {
-      if (tuning = 0){equalTuning(i);} // Recalculate frequencies for the new octave
-      if (tuning = 1){justTuning(i);} 
-      if (tuning = 2){pythTuning(i);}
-      if (tuning = 3){qcommaTuning(i);}
+      if (tuning == 0){equalTuning(i);} // Recalculate frequencies for the new octave
+      if (tuning == 1){justTuning(i);} 
+      if (tuning == 2){pythTuning(i);}
+      if (tuning == 3){qcommaTuning(i);}
       refFreq[i] = freq[i];  // Update reference frequencies
       osc[i].freq(freq[i]);  // Update the oscillator frequency
   } console.log("Octave Decreased to " + oct);
   } if (key === '=') { //If pressing =/+
     oct++;
     for (let i = 0; i < buttonCount; i++) {
-      if (tuning = 0){equalTuning(i);} // Recalculate frequencies for the new octave
-      if (tuning = 1){justTuning(i);} 
-      if (tuning = 2){pythTuning(i);}
-      if (tuning = 3){qcommaTuning(i);}
+      if (tuning == 0){equalTuning(i);} // Recalculate frequencies for the new octave
+      if (tuning == 1){justTuning(i);} 
+      if (tuning == 2){pythTuning(i);}
+      if (tuning == 3){qcommaTuning(i);}
       refFreq[i] = freq[i];  // Update reference frequencies
       osc[i].freq(freq[i]);  // Update the oscillator frequency
   } console.log("Octave Increased to " + oct);
@@ -509,22 +508,22 @@ function resetButton(i){
 function equalTuning(buttonIndex) {  //detuneCents is the scaledDistance from the sliders
   let toneIntervals = [0, 1, 2, 3, 4, 0, 5, 6, 7, 8, 9, 10, 11, 0, 12];  //New float array of tone/semitone intervals for diatonic major scale!
   //divisions = 12.;  // Default 12 divisons of the octave, change and take as arg in later version?
-  freq[buttonIndex] = tonic * (Math.pow(2, toneIntervals[buttonIndex] / divisions) *oct);  //Frequency is the tonic * 2 ^ (whatever button # aligns w tone array) / divisions as specified 
+  freq[buttonIndex] = tonic * (Math.pow(2, toneIntervals[buttonIndex] / divisions) *(2**oct));  //Frequency is the tonic * 2 ^ (whatever button # aligns w tone array) / divisions as specified 
 }  //End brace for equal tuning
 
 function justTuning(buttonIndex) {
   let ratios = [1, 16/15, 10/9, 6/5, 5/4, 0, 4/3, 45/32, 3/2, 8/5, 5/3, 9/5, 15/8, 0, 2];  //New float array of just intervals for diatonic major scale
-  freq[buttonIndex] = tonic * (ratios[buttonIndex]*oct);  //Frequency is the tonic * cooresponding intervals * octave multiplier
+  freq[buttonIndex] = tonic * (ratios[buttonIndex]*(2**oct));  //Frequency is the tonic * cooresponding intervals * octave multiplier
 }
 
 function pythTuning(buttonIndex) {
   let ratios = [1, 256/243, 9/8, 32/27, 81/64, 0, 4/3, 729/512, 3/2, 128/81, 27/16, 16/9, 243/128, 0, 2];  //New float array of pythagorean intervals for diatonic major scale
-  freq[buttonIndex] = tonic * (ratios[buttonIndex]*oct);  //Frequency is the tonic * cooresponding intervals * octave multiplier
+  freq[buttonIndex] = tonic * (ratios[buttonIndex]*(2**oct));  //Frequency is the tonic * cooresponding intervals * octave multiplier
 }
 
 function qcommaTuning(buttonIndex) {
   let ratios = [1, 1.06998, 1.11803, 1.19627, 1.24999, 0, 1.33747, 1.39753, 1.49534, 1.59999, 1.67184, 1.78884, 1.86918, 0, 1.99998];
-  freq[buttonIndex] = tonic * (ratios[buttonIndex]*oct);  //Frequency is the tonic * cooresponding intervals * octave multiplier
+  freq[buttonIndex] = tonic * (ratios[buttonIndex]*(2**oct));  //Frequency is the tonic * cooresponding intervals * octave multiplier
 }
 
 // Cents Calculator to move circleY position of each key-button to the location of the new tuning
