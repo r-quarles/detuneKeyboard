@@ -1,0 +1,54 @@
+DETUNE TUNING KEYBOARD - Rae Quarles - Dec 2024
+
+Running the program ---
+- This github page can be accessed via the link: https://r-quarles.github.io/detuneKeyboard/
+- To run the program locally:
+  - Download the zipped file from github.com/r-quarles
+  - Unzip and open the main folder in VS Code
+  - Open the sketch.js file and the index.html file
+  - Open Live Server by searching in the Command Pallette or using shortcut Alt+L for LiveServer then Alt+O for Open
+  - OR - 
+  - Open the .p5 web editor at https://editor.p5js.org/
+  - Copy and paste the .js code into the editor, and press run (you do not need to add any libraries)
+- To run prototype Processing version:
+  - Download Processing IDE and Supercollider to your machine
+  - Open the .sc file in Supercollider
+  - Start the Supercollider server by running line 8 s.boot; (select line and press Ctrl/Cmd + Enter to run, Ctrl/Cmd + . to stop)
+  - Select and run line 11 to find your local IP4 address, look for this in the command prompt and find the NetAddr(server, port)
+    - Mine looks like this: (127.0.0.1, 57120)
+  - Open .pde file in the Processing application
+  - Find line 60 and confirm your NetAddr matches what is listed in myAdress (if not, type it manually in the form "server", port)
+  - Start the synth and receiver in Supercollider by selecting and running lines 27 and 51
+  - Run the code in Processing using the "play" button
+
+CONCEPT - 
+This project is a combination of two purposes: to create a visual and interactive tool for exploring different musical tuning temperments, and to further expand upon my
+knowledge and experience with musical interface design. 
+
+
+DESIGN PROCESS -
+
+Articulate your concept and creative design process. Discuss and evaluate how existing digital
+or electronic music instruments have addressed interactive musical interfaces like yours. What
+are the additional features or interesting combination of features you have created (or would like
+to create) compared to existing interactive systems. (introduction and literature review)
+
+SOFTWARE SPECS - 
+✓ Describe all the hardware parts and software components you have and why you need them all.
+Elaborate this section of your document by details on your circuit diagram, how you put all your
+electronic parts together, which online resources or existing code you elaborated to build your
+project, which parts you had to design from scratch. Please keep in mind less is more. You don’t
+need to add too much complexity.
+
+INTERACTION -                                                                               
+✓ Discuss your mapping strategies, sonic components, range and magnitude of your parameters.
+Ideally draw a table or diagram that shows each interaction and the related sound parameter.
+(mapping)
+✓ Describe a use case of how a user can interact with your instruments and what are the possible
+outcomes. (use case)
+                                                                              
+FINAL THOUGHTS -                                                                               
+✓ Summarize your ideas, including what questions/problems were answered, what you learnt,
+what is still unresolved, and what new or refined questions/problems you discovered from your
+project and if and how you would continue this project in the future and if you are planning to
+expand it. (conclusion)
