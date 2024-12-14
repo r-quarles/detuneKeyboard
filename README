@@ -11,7 +11,7 @@ Running the program ---
   - Open the .p5 web editor at https://editor.p5js.org/
   - Copy and paste the .js code into the editor, and press run (you do not need to add any libraries)
 - To run prototype Processing version:
-  - Download Processing IDE and Supercollider to your machine
+  - Download Processing IDE and Supercollider to your machine, as well as the "processingFiles" folder found in "previousVersions"
   - Open the .sc file in Supercollider
   - Start the Supercollider server by running line 8 s.boot; (select line and press Ctrl/Cmd + Enter to run, Ctrl/Cmd + . to stop)
   - Select and run line 11 to find your local IP4 address, look for this in the command prompt and find the NetAddr(server, port)
@@ -23,32 +23,45 @@ Running the program ---
 
 CONCEPT - 
 This project is a combination of two purposes: to create a visual and interactive tool for exploring different musical tuning temperments, and to further expand upon my
-knowledge and experience with musical interface design. 
-
+knowledge and experience with musical interface design. This program can both be used as an instrument and a learning tool. Different tuning temperments cause notes to be
+perceived differently, in both musical qualities like consonance and emotional quality through purposeful manipulation. Notes can be played as a song, using the pitch shift 
+effect of each key to add inflection to certain parts. When holding down a key with a long sustain, different temperments can be chosen and their diffreneces can be analyzed.
 
 DESIGN PROCESS -
+Exploring emperimental music, it's a quick realization that the concept of "in tune" is abstract and mostly bogus. Humans have their own internal system of what a "correct"
+interval between notes is, but this is not bound by frequency and various external factors can affect this perception. Easley Blackwood's "Microtonal Compositions" shows off
+this concept with compostions in alternative equal-tempered divisions of 14 to 24 semi-tones to the octave. This music has depth and magic that modern music cannot achive even
+with the best VSTs. This comes down to a human's creative use of these discrepancies versus easily using a system free of such challenges.
 
-Articulate your concept and creative design process. Discuss and evaluate how existing digital
-or electronic music instruments have addressed interactive musical interfaces like yours. What
-are the additional features or interesting combination of features you have created (or would like
-to create) compared to existing interactive systems. (introduction and literature review)
+However, many of these concepts do not translate well into a playable instrument. This project is a attempt at solving some of those challenges in an engaging and fun-to-play
+way. The concept of this key with a detuning glide came early on in the process, and drove much of the rest of the design. These keys are made to have a center frequency when
+pressed, but can be shifted up or down by dragging the keys in either direction. This gives each key-slider a range of 100cents, 50 cents above the fundamental and 50 cents
+below. With a chromatic 12 note keyboard there is a complete cycle of all possible frequencies from the tonic to the octave keys, as the bottom of each key aligns with the top
+of the one before it. When playing chords this has a wonderful detuning effect, where a single interval can be shifted or the entire chord can be moved up or down in pitch. 
+When changing between tunings, we keep this logic of all frequencies being available and "move" the center of each key to it's respective frequency in that tuning. This allows
+users to visually see the difference in pitch of each tuned note in relation to the pitches they're most familiar with in 12 tone equal temperment.
 
 SOFTWARE SPECS - 
-✓ Describe all the hardware parts and software components you have and why you need them all.
-Elaborate this section of your document by details on your circuit diagram, how you put all your
-electronic parts together, which online resources or existing code you elaborated to build your
-project, which parts you had to design from scratch. Please keep in mind less is more. You don’t
-need to add too much complexity.
+The final version of this project is made using the p5 libraries for javascript. These resources allow a multitude of creative coding possibilities. As it's based off of  
+Processing, it was a fairly straightforward (albeit tedious) processes to convert the java code into javascript to be availble to publish online. The p5.sound library was the 
+sound engine for the project, and the Oscillator function is what created the piano notes. This is more crude of a sound than I would like, as the process for routing signal
+in p5 is much different from other sound engines I have used. This code is then called by an .html file that when hosted online makes the website it lives on.
+
+The p5 website can be found here: https://p5js.org/
 
 INTERACTION -                                                                               
 ✓ Discuss your mapping strategies, sonic components, range and magnitude of your parameters.
 Ideally draw a table or diagram that shows each interaction and the related sound parameter.
 (mapping)
-✓ Describe a use case of how a user can interact with your instruments and what are the possible
-outcomes. (use case)
+**INSERT DIAGRAM OF SIGNAL FLOW**
+
+To explore the instrument a user can play the chromatic or diatonic scale of each temperment, and then move onto playing chords. When pressing multiple keys to create these
+chords, the tonic note can be shifted up or down to change the relationship between it and the other notes. This gives a gliding detuned effect, where the instrument can 
+"speak" with inflection. These notes can be set to ring out and layered on top of each other to create complex tones as well. 
                                                                               
 FINAL THOUGHTS -                                                                               
-✓ Summarize your ideas, including what questions/problems were answered, what you learnt,
-what is still unresolved, and what new or refined questions/problems you discovered from your
-project and if and how you would continue this project in the future and if you are planning to
-expand it. (conclusion)
+This project has been a useful exercise in design that has furthered my ability to move my ideas from my machine to others. The biggest hurdle in this has been my lack of 
+knowledge, there are so many things I want to do that are beyond my current scope. It felt that every turn I was poreing over documentation and tutorials. However, this has
+also been a great help in developing my skills FOR learning, which is equally if not more important than the knowledge itself. I know the next step for similar projects
+is developing a workflow to emulate programs for other machines. There are many ways to do this and will allow me to be certain that others can see and enjoy my work. I will
+hopefully update this project as my knowledge expands. 
